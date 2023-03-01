@@ -1,5 +1,5 @@
 # structructure for table login  => "regsiter users"
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import UserMixin
 
 class User(UserMixin):
@@ -12,5 +12,9 @@ class User(UserMixin):
     @classmethod
     def check_password(self, hash_password, password):
         return check_password_hash(hash_password, password)
+    
+    @classmethod
+    def generate_password(self, password):
+        return generate_password_hash(password)
 
 #print(generate_password_hash('password'))

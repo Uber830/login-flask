@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import LoginManager ,login_user, logout_user, login_required
+from flask_login import LoginManager, login_user, logout_user, login_required
 from app import db, app
 
 # models
@@ -13,17 +13,44 @@ validate = Blueprint("login", __name__)
 
 login_manager_app = LoginManager(app)
 
+
 @login_manager_app.user_loader
 def load_user(id):
-    return modelUser.get_by_id(db,id)
+    return modelUser.get_by_id(db, id)
+
 
 # routes
 @validate.route("/")
 def index():
     print("Welcome")
-    return redirect(url_for("login.login"))
+    return redirect(url_for("login.register"))
 
 
+# register users
+@validate.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        respon = modelUser.get_user_exists(db, username)
+        print(username, password)
+
+        if respon == None:
+            user = User(0, username, User.generate_password(password))
+            add_user = modelUser.add_user(db, user)
+
+            print(add_user)
+            return "In progress Ok"
+
+        else:
+            flash("Insert data...")
+            return redirect(url_for("login.login"))
+
+    else:
+        return render_template("auth/register.html")
+
+
+# validation users
 @validate.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -32,8 +59,8 @@ def login():
         user = User(0, usermame, password)
         logger_user = modelUser.login(db, user)
 
-        if logger_user != None:  #yes user
-            if logger_user.password: #True password
+        if logger_user != None:  # yes user
+            if logger_user.password:  # True password
                 login_user(logger_user)
                 return redirect(url_for("login.home"))
             else:
@@ -49,3 +76,9 @@ def login():
 @validate.route("/home")
 def home():
     return render_template("home.html")
+
+
+@validate.route("/logout")
+def logout():
+    logout_user()  # delete seccion user
+    return redirect(url_for("login.login"))
