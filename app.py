@@ -1,8 +1,8 @@
 from flask import Flask
 from flask_mysqldb import MySQL
 from config import user, password, database, host
-from flask_login import LoginManager
 
+# proximamente implemetacion de corts
 app = Flask(__name__)
 
 app.secret_key = 'secret_key'

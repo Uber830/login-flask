@@ -32,18 +32,18 @@ def register():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        respon = modelUser.get_user_exists(db, username)
-        print(username, password)
+        respon = modelUser.get_user_exists(db, username) #None
 
         if respon == None:
-            user = User(0, username, User.generate_password(password))
+            user = User(0,username,password)
             add_user = modelUser.add_user(db, user)
 
-            print(add_user)
+            print (add_user)
             return "In progress Ok"
 
         else:
-            flash("Insert data...")
+            print("user exists already")
+            #flash("Insert data...")
             return redirect(url_for("login.login"))
 
     else:
