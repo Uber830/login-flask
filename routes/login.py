@@ -32,18 +32,17 @@ def register():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+        token = request.form["csrf_token"]
         respon = modelUser.get_user_exists(db, username) #None
 
         if respon == None:
             user = User(0,username,password)
             add_user = modelUser.add_user(db, user)
 
-            print (add_user)
-            return "In progress Ok"
-
+            print (f"Welcome {add_user.username}")
+            flash("Insert username and password...")
+            return redirect(url_for("login.login"))
         else:
-            print("user exists already")
-            #flash("Insert data...")
             return redirect(url_for("login.login"))
 
     else:
@@ -74,6 +73,7 @@ def login():
 
 
 @validate.route("/home")
+@login_required
 def home():
     return render_template("home.html")
 
