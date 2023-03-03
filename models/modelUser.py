@@ -60,10 +60,11 @@ class modelUser():
                 if respon != None:
                     return 'Existing user'
                 else:
-                    sql = "SELECT id,username FROM login WHERE username='{}'".format(user.username)
+                    sql = "SELECT username,password FROM login WHERE username='{}'".format(user.username)
                     cursors.execute(sql)
                     row = cursors.fetchone()
+                    print(row)  
 
-                    return User(row[0],row[1],None)
+                    return 'Todo va bien, Estamos trajando en ello'
         except Exception as ex:
             raise Exception(ex)

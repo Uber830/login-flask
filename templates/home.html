@@ -7,6 +7,6 @@
 {% endblock %}
 
 {% block body %}
-    <p>welcome to home!! {{ current_user.username }}</p>
+    <p>welcome to home!! {{ current_user.fullname }}</p>
     <a class="btn btn-primary" href="{{url_for('login.logout')}}">Logout</a>
 {% endblock %}
